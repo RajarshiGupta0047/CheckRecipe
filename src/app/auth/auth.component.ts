@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
+import { AuthService,AuthResponseData } from './auth.service';
 
 @Component({
     selector:'app-auth',
@@ -9,7 +10,7 @@ import { AuthService } from './auth.service';
     styleUrls: ['./auth.component.css']
 })
 export class AuthComponent{
-    constructor(private authService:AuthService){}
+    constructor(private authService:AuthService,private router:Router){}
     isLogin=true;
     isLoading=false;
     error:string=null;
@@ -37,6 +38,7 @@ export class AuthComponent{
                 (responseData)=>{
                     console.log(responseData);
                     this.isLoading=false;
+                    this.router.navigate(['/recipes']);
                 },
                 errorRes=>{
                     console.log(errorRes);
@@ -45,6 +47,13 @@ export class AuthComponent{
                     {
                         case 'EMAIL_EXISTS':
                             this.error="This email already exists!!!!";
+                            break;
+                        case 'INVALID_PASSWORD':
+                                this.error="Please enter a correct password!!"
+                                break;
+                        case 'EMAIL_NOT_FOUND':
+                            this.error="There is no user record corresponding to this email!!"
+                            break;
                         
                     }
                     
